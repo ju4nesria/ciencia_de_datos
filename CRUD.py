@@ -1,5 +1,4 @@
 from config.database import get_connection
-from models.user import User
 from psycopg2 import Error
 
 def create_user(name, email):
@@ -22,7 +21,7 @@ def get_all_users():
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM users')
             rows = cursor.fetchall()
-            return [User(id=row[0], name=row[1], email=row[2]) for row in rows]
+            return rows  
         except Error as e:
             print(f"Error fetching users: {e}")
         finally:
@@ -36,8 +35,7 @@ def get_user_by_id(user_id):
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM users WHERE id=%s', (user_id,))
             row = cursor.fetchone()
-            if row:
-                return User(id=row[0], name=row[1], email=row[2])
+            return row  
         except Error as e:
             print(f"Error fetching user by ID: {e}")
         finally:
